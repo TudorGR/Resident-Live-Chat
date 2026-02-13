@@ -1,0 +1,20 @@
+<div class="chat-container">
+  <h1>Resident Live Chat <span class="user-count">Connected Users: x</span></h1>
+  <ul class="messages">
+    <li *ngFor="let msg of messages">
+      <div class="msg">
+        <strong
+          >{{ msg.username }} <span class="time">{{ msg.time }}</span></strong
+        >
+        <span>{{ msg.message }}</span>
+      </div>
+    </li>
+  </ul>
+  <div class="inputs">
+    <div>
+      <input type="text" placeholder="Username" />
+      <button>Send</button>
+    </div>
+    <textarea rows="3" placeholder="Your message"></textarea>
+  </div>
+</div>
