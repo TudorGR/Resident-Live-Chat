@@ -19,7 +19,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("message", (msg) => {
-    io.emit("message", msg);
+    io.emit("message", {
+      type: "message",
+      username: msg.username,
+      message: msg.message,
+      time: new Date().toLocaleTimeString(),
+      id: socket.id,
+    });
   });
 
   socket.on("disconnect", () => {

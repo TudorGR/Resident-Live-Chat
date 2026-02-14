@@ -5,7 +5,7 @@
   <ul class="messages">
     <li *ngFor="let msg of messages()">
       <div *ngIf="msg.type === 'message'" class="msg">
-        <strong
+        <strong [ngClass]="{ 'current-user': isCurrentUser(msg) }"
           >{{ msg.username }} <span class="time">{{ msg.time }}</span></strong
         >
         <span>{{ msg.message }}</span>

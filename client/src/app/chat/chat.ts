@@ -9,6 +9,7 @@ interface Message {
   username?: string;
   message?: string;
   time?: string;
+  id?: string;
 }
 @Component({
   selector: 'app-chat',
@@ -62,13 +63,12 @@ export class Chat {
     this.socketService.getSocket().emit('message', {
       username: this.username(),
       message: this.message(),
-      time: new Date().toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      }),
       type: 'message',
     });
     this.message.set('');
+  }
+
+  isCurrentUser(msg: Message) {
+    return msg.id === this.socketService.getSocket().id;
   }
 }
