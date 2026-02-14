@@ -4,17 +4,19 @@
   </h1>
   <ul class="messages">
     <li *ngFor="let msg of messages()">
-      <div class="msg">
+      <div *ngIf="msg.type === 'message'" class="msg">
         <strong
           >{{ msg.username }} <span class="time">{{ msg.time }}</span></strong
         >
         <span>{{ msg.message }}</span>
       </div>
+      <div *ngIf="msg.type === 'notification'" class="notification">User {{ msg.status }}</div>
     </li>
   </ul>
   <div class="inputs">
     <div>
       <input
+        [ngClass]="{ 'input-error': error().username }"
         [value]="username()"
         (input)="updateUsername($event)"
         type="text"
@@ -23,6 +25,7 @@
       <button (click)="sendMessage()">Send</button>
     </div>
     <textarea
+      [ngClass]="{ 'input-error': error().message }"
       (input)="updateMessage($event)"
       [value]="message()"
       rows="3"

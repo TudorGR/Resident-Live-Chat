@@ -12,7 +12,11 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("User connected");
-  io.emit("users", io.engine.clientsCount);
+  io.emit("message", {
+    type: "notification",
+    count: io.engine.clientsCount,
+    status: "connected",
+  });
 
   socket.on("message", (msg) => {
     io.emit("message", msg);
@@ -20,7 +24,11 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
-    io.emit("users", io.engine.clientsCount);
+    io.emit("message", {
+      type: "notification",
+      count: io.engine.clientsCount,
+      status: "disconnected",
+    });
   });
 });
 
