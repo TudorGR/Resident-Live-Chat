@@ -1,6 +1,13 @@
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { SocketService } from '../socket';
 
+interface Message {
+  username: string;
+  message: string;
+  time: string;
+  id: string;
+}
 @Component({
   selector: 'app-chat',
   imports: [CommonModule],
@@ -8,26 +15,42 @@ import { Component } from '@angular/core';
   styleUrl: './chat.scss',
 })
 export class Chat {
-  messages = [
-    {
-      username: 'andrei',
-      message: 'mesaj1',
-      time: '22:22',
-    },
-    {
-      username: 'andrei',
-      message: 'mesaj2',
-      time: '22:22',
-    },
-    {
-      username: 'andrei',
-      message: 'mesaj3',
-      time: '22:22',
-    },
-    {
-      username: 'andrei',
-      message: 'mesaj4',
-      time: '22:22',
-    },
-  ];
+  messages = signal<Message[]>([]);
+  username = signal('');
+  message = signal('');
+  users = signal(0);
+
+  constructor(private socketService: SocketService) {}
+
+  ngOnInit() {
+    this.socketService.getSocket().on('message', (msg) => {
+      this.messages.update((prev) => [msg, ...prev]);
+    });
+    this.socketService.getSocket().on('users', (count) => {
+      this.users.set(count);
+    });
+  }
+
+  updateUsername(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.username.set(input.value);
+  }
+  updateMessage(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.message.set(input.value);
+  }
+
+  sendMessage() {
+    this.socketService.getSocket().emit('message', {
+      username: this.username(),
+      message: this.message(),
+      id: this.socketService.getSocket().id,
+      time: new Date().toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      }),
+    });
+    this.message.set('');
+  }
 }

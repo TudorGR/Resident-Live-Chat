@@ -1,7 +1,9 @@
 <div class="chat-container">
-  <h1>Resident Live Chat <span class="user-count">Connected Users: x</span></h1>
+  <h1>
+    Resident Live Chat <span class="user-count">Connected Users: {{ users() }}</span>
+  </h1>
   <ul class="messages">
-    <li *ngFor="let msg of messages">
+    <li *ngFor="let msg of messages()">
       <div class="msg">
         <strong
           >{{ msg.username }} <span class="time">{{ msg.time }}</span></strong
@@ -12,9 +14,19 @@
   </ul>
   <div class="inputs">
     <div>
-      <input type="text" placeholder="Username" />
-      <button>Send</button>
+      <input
+        [value]="username()"
+        (input)="updateUsername($event)"
+        type="text"
+        placeholder="Username"
+      />
+      <button (click)="sendMessage()">Send</button>
     </div>
-    <textarea rows="3" placeholder="Your message"></textarea>
+    <textarea
+      (input)="updateMessage($event)"
+      [value]="message()"
+      rows="3"
+      placeholder="Your message"
+    ></textarea>
   </div>
 </div>
